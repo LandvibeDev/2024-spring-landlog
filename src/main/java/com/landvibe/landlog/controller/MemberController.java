@@ -1,13 +1,18 @@
 package com.landvibe.landlog.controller;
 
 import com.landvibe.landlog.domain.Member;
+import com.landvibe.landlog.repository.MemoryMemberRepository;
 import com.landvibe.landlog.service.MemberService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class MemberController {
@@ -15,6 +20,30 @@ public class MemberController {
 
     public MemberController(MemberService memberService) {
         this.memberService = memberService;
+    }
+
+    @GetMapping(value ="/members/login")
+    public String login(){
+        return "members/loginForm";
+    }
+
+    @PostMapping(value = "/members/login")
+    public String findBlog(@ModelAttribute MemberLoginForm memberLoginForm){
+        Member member = new Member();
+        member.setEmail(memberLoginForm.getEmail());
+        member.setPassword(memberLoginForm.getPassword());
+        Optional<Member> user =  memberService.checkLogin(member);
+        if(user.isPresent()) {
+            return "redirect:/blogs?creatorId="+user.get().getId();
+        }
+        return "redirect:/";
+    }
+
+    @GetMapping(value="/blogs")
+    public String blogs(@RequestParam("creatorId") Long id, Model model){
+        Optional<Member> user = memberService.findOne(id);
+        model.addAttribute("name", user.get().getName());
+        return "blogList";
     }
 
     @GetMapping(value = "/members/new")
@@ -26,6 +55,8 @@ public class MemberController {
     public String create(MemberForm form) {
         Member member = new Member();
         member.setName(form.getName());
+        member.setEmail(form.getEmail());
+        member.setPassword(form.getPassword());
         memberService.join(member);
         return "redirect:/";
     }
