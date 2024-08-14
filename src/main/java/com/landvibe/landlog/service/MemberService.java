@@ -21,6 +21,20 @@ public class MemberService {
         return member.getId();
     }
 
+    public Optional<Member> checkLogin(Member member){
+        Optional<Member> user = findOne(member.getEmail());
+        if(user.isPresent()){
+            if(user.get().getPassword().equals(member.getPassword())){
+                return user;
+            }else {
+                return Optional.empty();
+            }
+        }
+        else {
+            return Optional.empty();
+        }
+    }
+
     private void validateDuplicateMember(Member member) {
         memberRepository.findByName(member.getName())
                 .ifPresent(m -> {
@@ -35,4 +49,9 @@ public class MemberService {
     public Optional<Member> findOne(Long memberId) {
         return memberRepository.findById(memberId);
     }
+
+    public Optional<Member> findOne(String email){
+        return memberRepository.findByEmail(email);
+    }
+
 }
