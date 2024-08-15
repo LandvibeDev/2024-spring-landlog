@@ -43,4 +43,20 @@ public class MemberService {
     public Optional<Member> findOne(Long memberId) {
         return memberRepository.findById(memberId);
     }
+
+    // 이메일과 비밀번호를 검증하여 회원을 찾는 메서드
+    public Optional<Member> login(String email, String password) {
+        Optional<Member> memberOpt = memberRepository.findByEmail(email);
+        if (memberOpt.isEmpty()) {
+            return Optional.empty(); // 이메일이 존재하지 않으면 빈 Optional 반환
+        }
+
+        Member member = memberOpt.get();
+        // 입력한 비밀번호와 저장된 비밀번호 비교 (단순 문자열 비교)
+        if (password.equals(member.getPassword())) {
+            return Optional.of(member); // 비밀번호가 일치하면 회원 반환
+        } else {
+            return Optional.empty(); // 비밀번호가 일치하지 않으면 빈 Optional 반환
+        }
+    }
 }
