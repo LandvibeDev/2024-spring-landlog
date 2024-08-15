@@ -29,8 +29,6 @@ public class MemberController {
         return "members/login";
     }
 
-
-
     @PostMapping(value = "/members/new")
     public String create(@ModelAttribute MemberForm form) {
         // 바인딩이 제대로 되었는지 확인
@@ -49,6 +47,15 @@ public class MemberController {
         return "redirect:/";
     }
 
+    @PostMapping(value = "/members/login")
+    public String login(@ModelAttribute LoginForm form) {
+        System.out.println("Form Data: " + form.getEmail() + ", " + form.getPassword());
+        Member member = new Member();
+        member.setEmail(form.getEmail());
+        member.setPassword(form.getPassword());
+
+        return "members/blogList";
+    }
 
 
     @GetMapping(value = "/members")
@@ -57,4 +64,6 @@ public class MemberController {
         model.addAttribute("members", members);
         return "members/memberList";
     }
+
+
 }
