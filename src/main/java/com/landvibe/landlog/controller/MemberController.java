@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class MemberController {
@@ -27,6 +28,8 @@ public class MemberController {
         Member member = new Member();
         member.setName(form.getName());
         memberService.join(member);
+        member.setEmail(form.getEmail()); //추가
+        member.setPassword(form.getPassword());
         return "redirect:/";
     }
 
@@ -36,4 +39,28 @@ public class MemberController {
         model.addAttribute("members", members);
         return "members/memberList";
     }
+    //폼 데이터: 사용자가 HTML 폼을 통해 제출한 데이터, MemberForm은 사용자가 입력한 데이터를 담기위한 객체
+    //모델: 컨트롤러에서 처리된 결과를 뷰에 넘겨서 표시하기 위해 사용(사용자목록)
+    @PostMapping(value = "/members/login")
+    public String loginPost(MemberForm form, Model model){
+        String email = form.getEmail();
+        String password = form.getPassword();
+        Optional<Member> member = memberService.findByEmail(email);
+        if(member.isPresent()){ //비번일치-> 블로그페이지, 불일치->홈
+            if(member.get().getPassword().equals(password)){
+                return "redirect:/blogs?creatorId="+member.get().getId();
+            }
+            else{
+                return "redirect:/";
+            }
+        }
+        else{
+            return "redirect:/"; //로그인 실패
+        }
+    }
+    @GetMapping(value = "/members/login")
+    public String login(){
+        return "members/loginForm";
+    }
+
 }
