@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.Optional;
@@ -62,5 +63,10 @@ public class MemberController {
     public String login(){
         return "members/loginForm";
     }
-
+    @GetMapping(value = "/blogs")
+    public String blog(@RequestParam("creatorId")Long Id,Model model){ //url에 적힌값 복사해서 변수에 넣기
+        Optional<Member> member = memberService.findOne(Id);
+        model.addAttribute("name",member.get().getName());
+        return "blogList";
+    }
 }
