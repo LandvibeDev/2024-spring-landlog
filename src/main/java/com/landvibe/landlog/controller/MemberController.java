@@ -60,4 +60,13 @@ public class MemberController {
         }
     }
 
+    @GetMapping(value = "/blogs")
+    public String blogForm(@RequestParam Long creatorId, Model model) {
+        Optional<Member> member = memberService.findOne(creatorId);
+        model.addAttribute("creatorId", creatorId);
+        Member member1 = member.get(); //'Member' 객체를 가져옴
+        model.addAttribute("name", member1.getName()); //여기서 넘겨줘야 blogList.html에서 사용가능
+        return "blogList";
+    }
+
 }
