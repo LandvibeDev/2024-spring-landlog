@@ -41,4 +41,23 @@ public class MemberController {
         return "members/memberList";
     }
 
+    @GetMapping(value = "/members/login")
+    public String loginForm() {
+        return "members/loginForm";
+    } //로그인 폼 반환
+
+    //로그인 폼 요청처리
+    @PostMapping(value = "/members/login")
+    public String login(@RequestParam String email, @RequestParam String pwd, Model model) {
+        try {
+            Member member = memberService.checkLogin(email, pwd); //로그인 성공여부 판단
+            model.addAttribute("member", member);
+            Long creatorId = member.getId();
+            return "redirect:/blogs?creatorId=" + creatorId;
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("error", e.getMessage());
+            return "redirect:/";
+        }
+    }
+
 }

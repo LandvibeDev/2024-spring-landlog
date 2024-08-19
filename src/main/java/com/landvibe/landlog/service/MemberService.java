@@ -28,6 +28,13 @@ public class MemberService {
                 });
     }
 
+    //로그인 성공여부 판단
+    public Member checkLogin(String email, String pwd) {
+        return memberRepository.findByEmail(email) //먼저 이메일이 일치하는지 확인하고
+                .filter(member -> member.getPwd().equals(pwd)) //그 중에서 비번 일치하는지 확인
+                .orElseThrow(() -> new IllegalArgumentException("잘못된 이메일 또는 비밀번호입니다."));
+    }
+
     public List<Member> findMembers() {
         return memberRepository.findAll();
     }
