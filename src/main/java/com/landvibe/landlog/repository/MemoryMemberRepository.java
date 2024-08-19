@@ -30,6 +30,15 @@ public class MemoryMemberRepository implements MemberRepository {
                 .findAny();
     }
 
+    public Optional<Member> findByEmail(String email) {
+        return store.values().stream()
+                .filter(member -> member.getEmail().equals(email))
+                .findAny();
+    }
+
+    public boolean validatePwd(Long id, String pwd) {
+        return store.get(id) != null && store.get(id).getPwd().equals(pwd);
+    }
     @Override
     public List<Member> findAll() {
         return new ArrayList<>(store.values());
