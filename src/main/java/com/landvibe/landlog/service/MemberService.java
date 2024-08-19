@@ -28,6 +28,18 @@ public class MemberService {
                 });
     }
 
+
+    public Optional<Member> findByEmail(String email) {
+        return memberRepository.findByEmail(email);
+    }
+
+
+
+    public Optional<Member> findById(Long memberId) {
+        return memberRepository.findById(memberId);
+    }
+
+
     public List<Member> findMembers() {
         return memberRepository.findAll();
     }
