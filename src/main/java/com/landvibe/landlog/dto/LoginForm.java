@@ -1,12 +1,11 @@
-package com.landvibe.landlog.controller;
+package com.landvibe.landlog.dto;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class MemberForm {
-    private String name;
+public class LoginForm {
     private String email;
     private String password;
 }

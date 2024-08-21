@@ -2,24 +2,29 @@ package com.landvibe.landlog.service;
 
 import com.landvibe.landlog.domain.Member;
 import com.landvibe.landlog.repository.MemberRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class MemberService {
+
     private final MemberRepository memberRepository;
 
-    public MemberService(MemberRepository memberRepository) {
-        this.memberRepository = memberRepository;
-    }
-
     public Long join(Member member) {
-        validateDuplicateMemberName(member); //중복 회원 이름 검증
-        validateDuplicateMemberEmail(member); // 중복 회원 이메일 검증
+
+        validateDuplicateMember(member);
+
         memberRepository.save(member);
         return member.getId();
+    }
+
+    private void validateDuplicateMember(Member member) {
+        validateDuplicateMemberEmail(member);
+        validateDuplicateMemberName(member);
     }
 
     private void validateDuplicateMemberName(Member member) {

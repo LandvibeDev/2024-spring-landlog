@@ -1,8 +1,9 @@
 package com.landvibe.landlog.controller;
 
 import com.landvibe.landlog.domain.Member;
+import com.landvibe.landlog.dto.LoginForm;
+import com.landvibe.landlog.dto.MemberForm;
 import com.landvibe.landlog.service.MemberService;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -87,9 +88,5 @@ public class MemberController {
             return "redirect:/";
         }
     }
-    @GetMapping("/blogs")
-    public String blogList(@RequestParam(name = "name", required = false) String name, Model model) {
-        model.addAttribute("name", name);
-        return "members/blogList"; // 템플릿 파일의 이름
-    }
+
 }
