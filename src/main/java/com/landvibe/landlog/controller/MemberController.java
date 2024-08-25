@@ -37,8 +37,6 @@ public class MemberController {
         return "redirect:/";
     }
 
-
-
     @GetMapping(value = "/members/new")
     public String createForm() {
         return "members/createMemberForm";
