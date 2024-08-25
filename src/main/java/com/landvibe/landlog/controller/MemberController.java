@@ -28,9 +28,14 @@ public class MemberController {
     public String create(MemberForm form) {
         Member member = new Member();
         member.setName(form.getName());
-        memberService.join(member);
         member.setEmail(form.getEmail()); //추가
         member.setPassword(form.getPassword());
+        try {
+            memberService.join(member);
+        } catch (IllegalStateException e) {
+            return "redirect:/"; //중복 이메일 있을시 회원 등록이 안됨.
+        }
+
         return "redirect:/";
     }
 
@@ -46,14 +51,11 @@ public class MemberController {
     public String loginPost(MemberForm form, Model model){
         String email = form.getEmail();
         String password = form.getPassword();
-        Optional<Member> member = memberService.findByEmail(email);
+        Optional<Member> member = memberService.emailEqualPassword(email,password);
         if(member.isPresent()){ //비번일치-> 블로그페이지, 불일치->홈
-            if(member.get().getPassword().equals(password)){
+
                 return "redirect:/blogs?creatorId="+member.get().getId();
-            }
-            else{
-                return "redirect:/";
-            }
+
         }
         else{
             return "redirect:/"; //로그인 실패
