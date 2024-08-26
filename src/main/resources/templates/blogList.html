@@ -5,6 +5,25 @@
     <!--블로그 폼-->
     <div>
         <h1><span th:text="${name}"/>의 블로그</h1>
+        <a th:href="@{/blogs/new?(creatorId=${creatorId})}">생성</a>
+        <br>
+        <br>
+        <table>
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>제목</th>
+                <th>내용</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="blog : ${blogs}">
+                <td th:text="${blog.id}"></td>
+                <td th:text="${blog.title}"></td>
+                <td th:text="${blog.content}"></td>
+            </tr>
+            </tbody>
+        </table>
     </div>
 </div> <!-- /container -->
 </body>
